@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Registration Successful - MAGIS Aloysius 2025">
+    <title>Registration Successful | MAGIS Aloysius 2025</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Success Page Specific Styles */
+        .success-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-container {
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .success-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.3), rgba(212, 175, 55, 0.3));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .success-circle svg {
+            width: 60px;
+            height: 60px;
+            stroke: #4ade80;
+            stroke-width: 2;
+            fill: none;
+            animation: draw-check 0.8s ease-out 0.5s forwards;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+        }
+
+        @keyframes draw-check {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 30px rgba(139, 0, 0, 0.3), 0 0 60px rgba(212, 175, 55, 0.1);
+            }
+
+            50% {
+                box-shadow: 0 0 50px rgba(139, 0, 0, 0.5), 0 0 100px rgba(212, 175, 55, 0.2);
+            }
+        }
+
+        .success-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            letter-spacing: 0.3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #f5f5f5 0%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .success-message {
+            font-size: 1.1rem;
+            color: var(--light-grey);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+        }
+
+        .success-message strong {
+            color: var(--white);
+        }
+
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--crimson), transparent);
+            margin: 2rem auto;
+        }
+
+        .whatsapp-section {
+            background: linear-gradient(135deg, rgba(37, 211, 102, 0.1), rgba(37, 211, 102, 0.05));
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .whatsapp-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            letter-spacing: 0.2rem;
+            margin-bottom: 1rem;
+            color: #25d366;
+        }
+
+        .whatsapp-text {
+            color: var(--light-grey);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+            color: white;
+            border-radius: 50px;
+            font-weight: 600;
+            letter-spacing: 0.1rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: all var(--transition-medium);
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .home-link {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border: 1px solid var(--grey);
+            font-size: 0.85rem;
+            letter-spacing: 0.2rem;
+            text-transform: uppercase;
+            color: var(--white);
+            transition: all var(--transition-medium);
+            text-decoration: none;
+        }
+
+        .home-link:hover {
+            border-color: var(--metallic);
+            color: var(--metallic);
+        }
+
+        /* Confetti Animation */
+        .confetti-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 5;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            top: -20px;
+            animation: fall 4s ease-out forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .confetti:nth-child(1) {
+            left: 10%;
+            background: var(--crimson);
+            animation-delay: 0s;
+        }
+
+        .confetti:nth-child(2) {
+            left: 25%;
+            background: var(--metallic);
+            animation-delay: 0.2s;
+        }
+
+        .confetti:nth-child(3) {
+            left: 40%;
+            background: var(--crimson);
+            animation-delay: 0.4s;
+        }
+
+        .confetti:nth-child(4) {
+            left: 55%;
+            background: var(--metallic);
+            animation-delay: 0.6s;
+        }
+
+        .confetti:nth-child(5) {
+            left: 70%;
+            background: var(--crimson);
+            animation-delay: 0.8s;
+        }
+
+        .confetti:nth-child(6) {
+            left: 85%;
+            background: var(--metallic);
+            animation-delay: 1s;
+        }
+
+        .confetti:nth-child(7) {
+            left: 15%;
+            background: var(--metallic);
+            animation-delay: 1.2s;
+        }
+
+        .confetti:nth-child(8) {
+            left: 35%;
+            background: var(--crimson);
+            animation-delay: 1.4s;
+        }
+
+        .confetti:nth-child(9) {
+            left: 60%;
+            background: var(--metallic);
+            animation-delay: 1.6s;
+        }
+
+        .confetti:nth-child(10) {
+            left: 80%;
+            background: var(--crimson);
+            animation-delay: 1.8s;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Smoke Overlay -->
+    <div class="smoke-overlay">
+        <div class="smoke smoke-1"></div>
+        <div class="smoke smoke-2"></div>
+        <div class="smoke smoke-3"></div>
+    </div>
+
+    <!-- Confetti -->
+    <div class="confetti-container">
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">MAGIS</a>
+            <ul class="nav-links">
+                <li><a href="index.html#home" class="nav-link">Home</a></li>
+                <li><a href="index.html#shop" class="nav-link">About</a></li>
+                <li><a href="index.html#about" class="nav-link">About MAGIS</a></li>
+                <li><a href="registion.html" class="nav-link">Register</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="cart-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span class="cart-count">0</span>
+                </button>
+            </div>
+            <button class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html#home" class="mobile-nav-link">Home</a></li>
+            <li><a href="index.html#shop" class="mobile-nav-link">About</a></li>
+            <li><a href="index.html#about" class="mobile-nav-link">About MAGIS</a></li>
+            <li><a href="registion.html" class="mobile-nav-link">Register</a></li>
+        </ul>
+    </div>
+
+    <!-- Success Section -->
+    <section class="success-page">
+        <div class="success-container fade-slide-up">
+            <!-- Success Icon -->
+            <div class="success-icon">
+                <div class="success-circle">
+                    <svg viewBox="0 0 24 24">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Success Message -->
+            <h1 class="success-title">Registration Successful!</h1>
+            <p class="success-message">
+                <strong>Congratulations!</strong> You have successfully registered for <strong>MAGIS Aloysius
+                    2026</strong>.
+                We're excited to have you join us for this incredible experience.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- WhatsApp Section -->
+            <div class="whatsapp-section">
+                <h2 class="whatsapp-title">Join Our Community</h2>
+                <p class="whatsapp-text">
+                    Stay connected with fellow participants! Join our official WhatsApp group for updates,
+                    announcements, and to connect with the MAGIS family.
+                </p>
+                <!-- Replace YOUR_WHATSAPP_GROUP_LINK with your actual WhatsApp group invite link -->
+                <a href="https://chat.whatsapp.com/E2geVCIVIUvDC8kaz8oyDM" target="_blank" class="whatsapp-btn">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                    Join WhatsApp Group
+                </a>
+            </div>
+
+            <!-- Back to Home -->
+            <a href="index.html" class="home-link">Back to Home</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <span class="footer-logo">MAGIS</span>
+                    <p class="footer-tagline">Encounter • Explore • Experience Christ.</p>
+                    <p>St Aloysius Institute of St Aloysius (Deemed to be University), Mangalore</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>Navigate</h4>
+                        <a href="index.html#home">Home</a>
+                        <a href="index.html#shop">Shop</a>
+                        <a href="index.html#about">About</a>
+                        <a href="registion.html">Register</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Legal</h4>
+                        <a href="#">MAGIS INSTAGRAM</a>
+                        <a href="#">POINT OF CONTACT</a>
+                        <a href="#">PHONE NO </a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Contact</h4>
+                        <a href="mailto:vault@magis.com">vault@magis.com</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 MAGIS. All rights reserved.</p>
+                <p class="footer-note">Each piece is created exclusively upon commission.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cursor Follower -->
+    <div class="cursor-follower">
+        <div class="cursor-dot"></div>
+        <div class="cursor-ring"></div>
+    </div>
+
+    <script src="j.js"></script>
+</body>
+
+</html>
