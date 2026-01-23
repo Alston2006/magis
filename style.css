@@ -2010,5 +2010,33 @@ select.form-input option:checked {
         cursor: pointer;
     }
 }
+/* ===========================
+   MAGIS CATEGORY IMAGES FIX
+   =========================== */
+
+.category-visual {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 16px;
+}
+
+/* MAGIS Encounter */
+.cat-noir {
+    background-image: url("encounter.JPG");
+}
+
+/* MAGIS + SAU */
+.cat-crimson {
+    background-image: url("magisau.JPG");
+}
+
+/* MAGIS Formation */
+.cat-obsidian {
+    background-image: url("magisformation.png");
+}
+
 
 
