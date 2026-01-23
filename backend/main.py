@@ -80,7 +80,7 @@ async def submit_form(
     ])
 
     return RedirectResponse(
-        url="https://YOUR-SITE/submit.html",
+        url="https://magis-frontend.onrender.com/submit.html",
         status_code=303
     )
 
@@ -131,3 +131,4 @@ def download_all():
 @app.get("/")
 def health():
     return {"status": "Backend running successfully"}
+
