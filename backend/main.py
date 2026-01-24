@@ -76,7 +76,7 @@ async def submit_form(
         },
         media_body=media,
         fields="id",
-        supportsAllDrives=False
+        supportsAllDrives=True
     ).execute()
 
 
@@ -113,6 +113,7 @@ async def submit_form(
 @app.get("/")
 def health():
     return {"status": "Backend running successfully"}
+
 
 
 
