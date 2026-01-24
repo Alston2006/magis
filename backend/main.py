@@ -51,7 +51,7 @@ async def submit_form(
     payment_proof: UploadFile = File(...)
 ):
     # 🔑 READ FILE AS BYTES (IMPORTANT)
-    file_bytes = await payment_proof.read()
+    
 
     # ☁️ CLOUDINARY UNSIGNED UPLOAD
     upload_result = cloudinary.uploader.upload(
@@ -88,4 +88,5 @@ async def submit_form(
 @app.get("/")
 def health():
     return {"status": "Backend running successfully"}
+
 
