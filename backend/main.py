@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Form, UploadFile, File
-from fastapi.responses import RedirectResponse, JSONResponse
+from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -7,7 +7,6 @@ from datetime import datetime
 import cloudinary
 import cloudinary.uploader
 import os
-import shutil
 
 # ---------------- APP SETUP ----------------
 app = FastAPI()
@@ -19,29 +18,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+# ---------------- CLOUDINARY ----------------
+cloudinary.config(
+    cloud_name=os.environ["CLOUDINARY_CLOUD_NAME"],
+    api_key=os.environ["CLOUDINARY_API_KEY"],
+    api_secret=os.environ["CLOUDINARY_API_SECRET"]
+)
 
-# ---------------- GOOGLE SHEETS AUTH ----------------
-SCOPES = [
-    "https://spreadsheets.google.com/feeds",
-    "https://www.googleapis.com/auth/drive"
-]
-
+# ---------------- GOOGLE SHEETS ----------------
+SCOPES = ["https://spreadsheets.google.com/feeds"]
 creds = ServiceAccountCredentials.from_json_keyfile_name(
     "credentials.json", SCOPES
 )
 
 sheet_client = gspread.authorize(creds)
 sheet = sheet_client.open("MAGIS_REGISTRATIONS").sheet1
-
-# ---------------- CLOUDINARY CONFIG ----------------
-cloudinary.config(
-    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
-    api_key=os.getenv("CLOUDINARY_API_KEY"),
-    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
-    secure=True
-)
 
 # ---------------- FORM SUBMIT ----------------
 @app.post("/submit")
@@ -55,31 +46,17 @@ async def submit_form(
     tshirt_size: str = Form(...),
     payment_proof: UploadFile = File(...)
 ):
-    ext = payment_proof.filename.split(".")[-1]
-    filename = f"{register_no}.{ext}"
-    local_path = os.path.join(UPLOAD_DIR, filename)
+    # Upload to Cloudinary (UNSIGNED)
+    upload_result = cloudinary.uploader.upload(
+        payment_proof.file,
+        folder="MAGIS_PAYMENTS",
+        upload_preset="magis_payments",
+        public_id=register_no
+    )
 
-    # 1️⃣ Save locally (temporary)
-    with open(local_path, "wb") as buffer:
-        shutil.copyfileobj(payment_proof.file, buffer)
+    image_url = upload_result["secure_url"]
 
-    cloudinary_url = "UPLOAD_FAILED"
-
-    # 2️⃣ Upload to Cloudinary
-    try:
-        result = cloudinary.uploader.upload(
-            local_path,
-            folder="MAGIS_PAYMENTS",
-            public_id=register_no,
-            overwrite=True,
-            resource_type="image"
-        )
-        cloudinary_url = result.get("secure_url")
-
-    except Exception as e:
-        print("⚠️ Cloudinary upload failed:", e)
-
-    # 3️⃣ Save to Google Sheets
+    # Save to Google Sheets
     sheet.append_row([
         name,
         register_no,
@@ -88,11 +65,10 @@ async def submit_form(
         college,
         class_name,
         tshirt_size,
-        cloudinary_url,
+        image_url,
         datetime.now().strftime("%d-%m-%Y %H:%M")
     ])
 
-    # 4️⃣ Redirect user
     return RedirectResponse(
         url="https://magis-frontend.onrender.com/submit.html",
         status_code=303
