@@ -18,7 +18,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ---------------- CLOUDINARY ----------------
+# ---------------- CLOUDINARY (SIGNED) ----------------
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
     api_key=os.getenv("CLOUDINARY_API_KEY"),
@@ -50,19 +50,13 @@ async def submit_form(
     tshirt_size: str = Form(...),
     payment_proof: UploadFile = File(...)
 ):
-    # 🔑 READ FILE AS BYTES (IMPORTANT)
-    
-
-    # ☁️ CLOUDINARY UNSIGNED UPLOAD
+    # ☁️ SIGNED CLOUDINARY UPLOAD (NO PRESET)
     upload_result = cloudinary.uploader.upload(
         payment_proof.file,
         folder="MAGIS_PAYMENTS",
         public_id=register_no,
         resource_type="image"
     )
-
-
-    
 
     image_url = upload_result["secure_url"]
 
@@ -88,5 +82,3 @@ async def submit_form(
 @app.get("/")
 def health():
     return {"status": "Backend running successfully"}
-
-
