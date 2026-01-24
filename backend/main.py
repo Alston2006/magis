@@ -47,58 +47,69 @@ async def submit_form(
     tshirt_size: str = Form(...),
     payment_proof: UploadFile = File(...)
 ):
-    # Read image
+    telegram_status = "Not sent"
+
+    # 1️⃣ READ FILE
     image_bytes = await payment_proof.read()
 
-    # -------- SEND IMAGE TO TELEGRAM --------
-    caption = (
-        f"🧾 *MAGIS Registration*\n\n"
-        f"👤 Name: {name}\n"
-        f"🆔 Reg No: {register_no}\n"
-        f"📞 Phone: {phone}\n"
-        f"📧 Email: {email}\n"
-        f"🏫 College: {college}\n"
-        f"🏷 Class: {class_name}\n"
-        f"👕 T-Shirt: {tshirt_size}\n"
-        f"⏰ Time: {datetime.now().strftime('%d-%m-%Y %H:%M')}"
-    )
+    # 2️⃣ TRY TELEGRAM (NON-BLOCKING)
+    try:
+        caption = (
+            f"🧾 *MAGIS Registration*\n\n"
+            f"👤 Name: {name}\n"
+            f"🆔 Reg No: {register_no}\n"
+            f"📞 Phone: {phone}\n"
+            f"📧 Email: {email}\n"
+            f"🏫 College: {college}\n"
+            f"🏷 Class: {class_name}\n"
+            f"👕 T-Shirt: {tshirt_size}\n"
+            f"⏰ Time: {datetime.now().strftime('%d-%m-%Y %H:%M')}"
+        )
 
-    telegram_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto"
+        telegram_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto"
 
-    response = requests.post(
-        telegram_url,
-        data={
-            "chat_id": CHAT_ID,
-            "caption": caption,
-            "parse_mode": "Markdown"
-        },
-        files={
-            "photo": (payment_proof.filename, image_bytes)
-        }
-    )
+        r = requests.post(
+            telegram_url,
+            data={
+                "chat_id": CHAT_ID,
+                "caption": caption,
+                "parse_mode": "Markdown"
+            },
+            files={
+                "photo": (payment_proof.filename, image_bytes)
+            },
+            timeout=10
+        )
 
-    if response.status_code != 200:
-        print("Telegram Error:", response.text)
+        if r.status_code == 200:
+            telegram_status = "Sent to Telegram"
+        else:
+            telegram_status = "Telegram failed"
 
-    # -------- SAVE TO GOOGLE SHEETS (UNCHANGED STRUCTURE) --------
-    sheet.append_row([
-        name,
-        register_no,
-        phone,
-        email,
-        college,
-        class_name,
-        tshirt_size,
-        "Sent to Telegram",
-        datetime.now().strftime("%d-%m-%Y %H:%M")
-    ])
+    except Exception as e:
+        print("Telegram error:", e)
+        telegram_status = "Telegram exception"
 
+    # 3️⃣ ALWAYS SAVE TO GOOGLE SHEETS
+    try:
+        sheet.append_row([
+            name,
+            register_no,
+            phone,
+            email,
+            college,
+            class_name,
+            tshirt_size,
+            telegram_status,
+            datetime.now().strftime("%d-%m-%Y %H:%M")
+        ])
+    except Exception as e:
+        print("Sheet error:", e)
+        # Even if sheet fails, user still gets redirect
+
+    # 4️⃣ ALWAYS REDIRECT USER
     return RedirectResponse(
         url="https://magis-frontend.onrender.com/submit.html",
         status_code=303
     )
 
-# ---------------- HEALTH ----------------
-@app.get("/")
-def health():
-    return {"status": "Backend running successfully"}
