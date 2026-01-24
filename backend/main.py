@@ -40,7 +40,7 @@ sheet = sheet_client.open("MAGIS_REGISTRATIONS").sheet1
 drive_service = build("drive", "v3", credentials=creds)
 
 # 🔴 CHANGE THIS
-DRIVE_FOLDER_ID = "1ovoxAvjdiS3Zq68k3KzMSqIMrygBiar0"
+DRIVE_FOLDER_ID = "1gDougVAu7Hb3acB9Ym5WaI_gCI5htWjn"
 
 # ---------------- FORM SUBMIT ----------------
 @app.post("/submit")
@@ -64,14 +64,16 @@ async def submit_form(
 
     # Upload to Google Drive
     media = MediaFileUpload(local_path, resumable=True)
-    drive_file = drive_service.files().create(
-        body={
-            "name": filename,
-            "parents": [DRIVE_FOLDER_ID]
-        },
-        media_body=media,
-        fields="id"
-    ).execute()
+   drive_file = drive_service.files().create(
+    body={
+        "name": filename,
+        "parents": [DRIVE_FOLDER_ID]
+    },
+    media_body=media,
+    fields="id",
+    supportsAllDrives=False
+).execute()
+
 
     file_id = drive_file.get("id")
 
@@ -105,3 +107,4 @@ async def submit_form(
 @app.get("/")
 def health():
     return {"status": "Backend running successfully"}
+
