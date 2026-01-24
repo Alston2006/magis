@@ -62,17 +62,23 @@ async def submit_form(
     with open(local_path, "wb") as buffer:
         shutil.copyfileobj(payment_proof.file, buffer)
 
-    # Upload to Google Drive
-    media = MediaFileUpload(local_path, resumable=True)
-   drive_file = drive_service.files().create(
-    body={
-        "name": filename,
-        "parents": [DRIVE_FOLDER_ID]
-    },
-    media_body=media,
-    fields="id",
-    supportsAllDrives=False
-).execute()
+        # Upload to Google Drive
+    media = MediaFileUpload(
+        local_path,
+        mimetype=payment_proof.content_type,
+        resumable=False
+    )
+
+    drive_file = drive_service.files().create(
+        body={
+            "name": filename,
+            "parents": [DRIVE_FOLDER_ID]
+        },
+        media_body=media,
+        fields="id",
+        supportsAllDrives=False
+    ).execute()
+
 
 
     file_id = drive_file.get("id")
@@ -107,4 +113,5 @@ async def submit_form(
 @app.get("/")
 def health():
     return {"status": "Backend running successfully"}
+
 
