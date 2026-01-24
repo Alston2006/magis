@@ -20,9 +20,9 @@ app.add_middleware(
 
 # ---------------- CLOUDINARY ----------------
 cloudinary.config(
-    cloud_name=os.environ["CLOUDINARY_CLOUD_NAME"],
-    api_key=os.environ["CLOUDINARY_API_KEY"],
-    api_secret=os.environ["CLOUDINARY_API_SECRET"]
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET")
 )
 
 # ---------------- GOOGLE SHEETS ----------------
@@ -50,17 +50,20 @@ async def submit_form(
     tshirt_size: str = Form(...),
     payment_proof: UploadFile = File(...)
 ):
-    # Upload to Cloudinary (UNSIGNED)
+    # 🔑 READ FILE AS BYTES (IMPORTANT)
+    file_bytes = await payment_proof.read()
+
+    # ☁️ CLOUDINARY UNSIGNED UPLOAD
     upload_result = cloudinary.uploader.upload(
-        payment_proof.file,
+        file_bytes,
         folder="MAGIS_PAYMENTS",
-        upload_preset="magis_payments",
+        upload_preset="magis_payments",  # MUST be unsigned preset
         public_id=register_no
     )
 
     image_url = upload_result["secure_url"]
 
-    # Save to Google Sheets
+    # 📄 SAVE TO GOOGLE SHEETS
     sheet.append_row([
         name,
         register_no,
@@ -82,4 +85,3 @@ async def submit_form(
 @app.get("/")
 def health():
     return {"status": "Backend running successfully"}
-
