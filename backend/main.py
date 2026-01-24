@@ -55,11 +55,14 @@ async def submit_form(
 
     # ☁️ CLOUDINARY UNSIGNED UPLOAD
     upload_result = cloudinary.uploader.upload(
-        file_bytes,
+        payment_proof.file,
         folder="MAGIS_PAYMENTS",
-        upload_preset="magis_payments",  # MUST be unsigned preset
-        public_id=register_no
+        public_id=register_no,
+        resource_type="image"
     )
+
+
+    
 
     image_url = upload_result["secure_url"]
 
@@ -85,3 +88,4 @@ async def submit_form(
 @app.get("/")
 def health():
     return {"status": "Backend running successfully"}
+
