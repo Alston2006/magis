@@ -1,12 +1,12 @@
 from fastapi import FastAPI, Form, UploadFile, File
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
+from datetime import datetime
+import os
+import requests
+
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-from datetime import datetime
-import cloudinary
-import cloudinary.uploader
-import os
 
 # ---------------- APP SETUP ----------------
 app = FastAPI()
@@ -18,12 +18,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ---------------- CLOUDINARY (SIGNED) ----------------
-cloudinary.config(
-    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
-    api_key=os.getenv("CLOUDINARY_API_KEY"),
-    api_secret=os.getenv("CLOUDINARY_API_SECRET")
-)
+# ---------------- TELEGRAM CONFIG ----------------
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 # ---------------- GOOGLE SHEETS ----------------
 SCOPES = [
@@ -50,20 +47,40 @@ async def submit_form(
     tshirt_size: str = Form(...),
     payment_proof: UploadFile = File(...)
 ):
-    # ✅ READ FILE AS BYTES (CRITICAL)
-    file_bytes = await payment_proof.read()
+    # Read image
+    image_bytes = await payment_proof.read()
 
-    # ✅ SIGNED CLOUDINARY UPLOAD (NO PRESET)
-    upload_result = cloudinary.uploader.upload(
-        file_bytes,
-        folder="MAGIS_PAYMENTS",
-        public_id=register_no,
-        resource_type="image"
+    # -------- SEND IMAGE TO TELEGRAM --------
+    caption = (
+        f"🧾 *MAGIS Registration*\n\n"
+        f"👤 Name: {name}\n"
+        f"🆔 Reg No: {register_no}\n"
+        f"📞 Phone: {phone}\n"
+        f"📧 Email: {email}\n"
+        f"🏫 College: {college}\n"
+        f"🏷 Class: {class_name}\n"
+        f"👕 T-Shirt: {tshirt_size}\n"
+        f"⏰ Time: {datetime.now().strftime('%d-%m-%Y %H:%M')}"
     )
 
-    image_url = upload_result["secure_url"]
+    telegram_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto"
 
-    # ✅ SAVE TO GOOGLE SHEETS
+    response = requests.post(
+        telegram_url,
+        data={
+            "chat_id": CHAT_ID,
+            "caption": caption,
+            "parse_mode": "Markdown"
+        },
+        files={
+            "photo": (payment_proof.filename, image_bytes)
+        }
+    )
+
+    if response.status_code != 200:
+        print("Telegram Error:", response.text)
+
+    # -------- SAVE TO GOOGLE SHEETS (UNCHANGED STRUCTURE) --------
     sheet.append_row([
         name,
         register_no,
@@ -72,7 +89,7 @@ async def submit_form(
         college,
         class_name,
         tshirt_size,
-        image_url,
+        "Sent to Telegram",
         datetime.now().strftime("%d-%m-%Y %H:%M")
     ])
 
@@ -81,4 +98,7 @@ async def submit_form(
         status_code=303
     )
 
-
+# ---------------- HEALTH ----------------
+@app.get("/")
+def health():
+    return {"status": "Backend running successfully"}
