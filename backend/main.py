@@ -50,9 +50,12 @@ async def submit_form(
     tshirt_size: str = Form(...),
     payment_proof: UploadFile = File(...)
 ):
-    # ☁️ SIGNED CLOUDINARY UPLOAD (NO PRESET)
+    # ✅ READ FILE AS BYTES (CRITICAL)
+    file_bytes = await payment_proof.read()
+
+    # ✅ SIGNED CLOUDINARY UPLOAD (NO PRESET)
     upload_result = cloudinary.uploader.upload(
-        payment_proof.file,
+        file_bytes,
         folder="MAGIS_PAYMENTS",
         public_id=register_no,
         resource_type="image"
@@ -60,7 +63,7 @@ async def submit_form(
 
     image_url = upload_result["secure_url"]
 
-    # 📄 SAVE TO GOOGLE SHEETS
+    # ✅ SAVE TO GOOGLE SHEETS
     sheet.append_row([
         name,
         register_no,
@@ -78,7 +81,4 @@ async def submit_form(
         status_code=303
     )
 
-# ---------------- HEALTH ----------------
-@app.get("/")
-def health():
-    return {"status": "Backend running successfully"}
+
