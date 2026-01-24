@@ -26,7 +26,11 @@ cloudinary.config(
 )
 
 # ---------------- GOOGLE SHEETS ----------------
-SCOPES = ["https://spreadsheets.google.com/feeds"]
+SCOPES = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
+
 creds = ServiceAccountCredentials.from_json_keyfile_name(
     "credentials.json", SCOPES
 )
@@ -78,3 +82,4 @@ async def submit_form(
 @app.get("/")
 def health():
     return {"status": "Backend running successfully"}
+
