@@ -44,6 +44,8 @@ async def submit_form(
     email: str = Form(...),
     college: str = Form(...),
     class_name: str = Form(..., alias="class"),
+    gender: str = Form(...),
+    blood_group: str = Form(...),
     tshirt_size: str = Form(...),
     payment_proof: UploadFile = File(...)
 ):
@@ -62,6 +64,8 @@ async def submit_form(
             f"📧 Email: {email}\n"
             f"🏫 College: {college}\n"
             f"🏷 Class: {class_name}\n"
+            f"🚻 Gender: {gender}\n"
+            f"🩸 Blood Group: {blood_group}\n"
             f"👕 T-Shirt: {tshirt_size}\n"
             f"⏰ Time: {datetime.now().strftime('%d-%m-%Y %H:%M')}"
         )
@@ -99,6 +103,8 @@ async def submit_form(
             email,
             college,
             class_name,
+            gender,
+            blood_group,
             tshirt_size,
             telegram_status,
             datetime.now().strftime("%d-%m-%Y %H:%M")

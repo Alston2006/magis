@@ -74,11 +74,8 @@
                 <p class="custom-subtitle">Lets have fun together.</p>
             </div>
 
-            <form class="custom-form fade-slide-up"
-      id="customForm"
-      method="POST"
-      action="https://magis-bac3.onrender.com/submit"
-      enctype="multipart/form-data">
+            <form class="custom-form fade-slide-up" id="customForm" method="POST"
+                action="https://magis-bac3.onrender.com/submit" enctype="multipart/form-data">
 
 
 
@@ -119,6 +116,33 @@
                     <div class="form-group">
                         <label class="form-label">Class</label>
                         <input type="text" name="class" class="form-input" placeholder="Your Class" required>
+                        <div class="input-line"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Gender</label>
+                        <select name="gender" class="form-input" required>
+                            <option value="" disabled selected>Select gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <div class="input-line"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Blood Group</label>
+                        <select name="blood_group" class="form-input" required>
+                            <option value="" disabled selected>Select blood group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
                         <div class="input-line"></div>
                     </div>
 
