@@ -42,6 +42,7 @@ async def submit_form(
     register_no: str = Form(...),
     phone: str = Form(...),
     email: str = Form(...),
+    age: str = Form(...),
     college: str = Form(...),
     class_name: str = Form(..., alias="class"),
     gender: str = Form(...),
@@ -62,6 +63,7 @@ async def submit_form(
             f"🆔 Reg No: {register_no}\n"
             f"📞 Phone: {phone}\n"
             f"📧 Email: {email}\n"
+            f"🎂 Age: {age}\n"
             f"🏫 College: {college}\n"
             f"🏷 Class: {class_name}\n"
             f"🚻 Gender: {gender}\n"
@@ -101,6 +103,7 @@ async def submit_form(
             register_no,
             phone,
             email,
+            age,
             college,
             class_name,
             gender,
