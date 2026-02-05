@@ -1,3 +1,17 @@
+html, body{
+    margin:0;
+    padding:0;
+    height:100%;
+}
+
+
+
+
+
+
+
+
+
 /* MAGIS - Premium Collector Cakes | Dark Cinematic E-commerce */
 :root {
     --black: #000000;
@@ -2038,5 +2052,100 @@ select.form-input option:checked {
     background-image: url("magisformation.png");
 }
 
+/* changes (magis.html) */
+.magis-hero{
+
+    padding-top:80px;
+    padding-bottom:40px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background: radial-gradient(circle,#1a1a1a 0%, #000 75%);
+}
+
+
+
+
+.magis-logo{
+    width:260px;   /* ⭐ SWEET SPOT */
+    display:block;
+    margin:auto;
+}
+
+
+
+.magis-logo:hover{
+    transform:scale(1.05);
+    opacity:1;
+}
+
+
+.magis-prayer{
+    padding:8rem 2rem;
+    text-align:center;
+}
+
+.prayer-card{
+    max-width:800px;
+    margin:auto;
+    padding:4rem;
+    border:1px solid var(--deep-grey);
+    border-radius:18px;
+
+    background:rgba(255,255,255,.02);
+    backdrop-filter:blur(20px);
+
+    line-height:2;
+    color:var(--light-grey);
+    font-size:1.15rem;
+}
+
+.prayer-card p{
+    margin-bottom:2rem;
+}
+
+.amen{
+    color:var(--metallic);
+    letter-spacing:.2rem;
+    font-size:1.4rem;
+}
+ 
+.inigo{
+    padding:8rem 3rem;
+    background:var(--charcoal);
+}
+
+.inigo-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:2rem;
+    max-width:1300px;
+    margin:auto;
+}
+
+.inigo-card{
+    padding:2.5rem;
+    border:1px solid var(--deep-grey);
+    border-radius:14px;
+    text-align:center;
+    transition:.4s;
+}
+
+.inigo-card:hover{
+    border-color:var(--metallic);
+    transform:translateY(-8px);
+}
+
+.inigo-card h3{
+    font-family:var(--font-heading);
+    letter-spacing:.15rem;
+    margin-bottom:.8rem;
+}
+
+.inigo-card p{
+    color:var(--light-grey);
+}
 
 
